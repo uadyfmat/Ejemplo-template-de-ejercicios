@@ -1,20 +1,23 @@
 #!/bin/bash
-z=$(grep -s -L this E-*)
+exercisesList=$(grep -s -L this E-*)
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+reset=`tput sgr0`
 
 directories=0
 exercises=0
 
-for i in ${z}; 
+for i in ${exercisesList}; 
 do
   directories=$((directories + 1))
-  test-runner -e ${i} >> result
+  test-runner -e -s ${i} >> result
   
   if [ $? -eq 0 ]
   then
     exercises=$((exercises + 1))
-    printf '%s\t%s\n' ${i} Correcto >> exercises-list
+    printf '%s\t%s\n' ${i} "${green}Correcto${reset}" >> exercises-list
   else
-    printf '%s\t%s\n' ${i} Error >> exercises-list
+    printf '%s\t%s\n' ${i} "${red}Error${reset}" >> exercises-list
   fi
 done;
 
@@ -25,7 +28,7 @@ echo '#########'
 
 echo ' '
 echo '#########'
-echo Exercises list
+echo Lista de ejercicios
 echo '#########'
 
 cat exercises-list
